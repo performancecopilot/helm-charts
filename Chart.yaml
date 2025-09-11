@@ -4,3 +4,4 @@ description: A Helm chart for Performance Co-Pilot
 type: application
 version: 0.1.0
 appVersion: "latest"
+icon: https://raw.githubusercontent.com/performancecopilot/pcp/main/images/pcpicon-light.png
