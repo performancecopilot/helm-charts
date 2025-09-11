@@ -1,0 +1,130 @@
+# Default values for Performance Co-Pilot
+replicaCount: 1
+
+image:
+  repository: quay.io/performancecopilot/pcp
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels:
+  name: pcp
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: true
+
+# Container runtime configuration
+# PCP container uses systemd init and requires special handling
+shareProcessNamespace: false
+terminationGracePeriodSeconds: 30
+
+# Network configuration
+hostNetwork: false
+
+service:
+  type: ClusterIP
+  ports:
+    pmcd: 44321
+    pmproxy: 44322
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+
+livenessProbe:
+  exec:
+    command:
+      - /bin/bash
+      - -c
+      - "systemctl is-active pmcd"
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+readinessProbe:
+  tcpSocket:
+    port: pmcd-port
+  initialDelaySeconds: 15
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Performance Co-Pilot typically runs as a single instance
+# Multiple replicas don't make sense for system monitoring
+autoscaling:
+  enabled: false
+
+# Persistent storage for PCP logs
+persistence:
+  pmlogger:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    mountPath: /var/log/pcp/pmlogger
+  pmproxy:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    mountPath: /var/log/pcp/pmproxy
+
+# Host monitoring configuration
+hostMonitoring:
+  enabled: false
+  hostPath: /
+  mountPath: /host
+
+volumes:
+  - name: openmetrics-pmda-volume
+    configMap:
+      name: openmetrics-pmda-configmap
+  - name: openmetrics-pmlogconf-volume
+    configMap:
+      name: openmetrics-pmlogconf-configmap
+
+volumeMounts:
+  - name: openmetrics-pmda-volume
+    mountPath: /var/lib/pcp/pmdas/openmetrics/config.d
+    readOnly: true
+  - name: openmetrics-pmlogconf-volume
+    mountPath: /var/lib/pcp/config/pmlogconf/openmetrics
+    readOnly: true
+
+# Environment variables for PCP configuration
+env:
+  # Comma-separated list of PCP services to start (default: pmcd,pmie,pmlogger,pmproxy)
+  PCP_SERVICES: "pmcd,pmie,pmlogger,pmproxy"
+  # Comma-separated list of PCP agents to start automatically (e.g., "bpf,bpftrace")
+  # PCP_DOMAIN_AGENTS: "bpf,bpftrace,postgresql"
+  # Path inside container to host root mount (for host monitoring)
+  # HOST_MOUNT: "/host"
+  # Key server connection specs for Redis/Valkey (default: localhost:6379)
+  KEY_SERVERS: "localhost:6379"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,35 @@
+{{- if .Values.persistence.pmlogger.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pcp.fullname" . }}-pmlogger
+  labels:
+    {{- include "pcp.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.pmlogger.accessMode }}
+  {{- if .Values.persistence.pmlogger.storageClass }}
+  storageClassName: {{ .Values.persistence.pmlogger.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.pmlogger.size }}
+---
+{{- end }}
+{{- if .Values.persistence.pmproxy.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pcp.fullname" . }}-pmproxy
+  labels:
+    {{- include "pcp.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.pmproxy.accessMode }}
+  {{- if .Values.persistence.pmproxy.storageClass }}
+  storageClassName: {{ .Values.persistence.pmproxy.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.pmproxy.size }}
+{{- end }}

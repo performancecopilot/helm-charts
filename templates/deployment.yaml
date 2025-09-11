@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pcp.fullname" . }}
+  labels:
+    {{- include "pcp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pcp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pcp.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pcp.serviceAccountName" . }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      shareProcessNamespace: {{ .Values.shareProcessNamespace }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: pmcd-port
+              containerPort: {{ .Values.service.ports.pmcd }}
+              protocol: TCP
+            - name: pmproxy-port
+              containerPort: {{ .Values.service.ports.pmproxy }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.env }}
+          env:
+            {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.persistence.pmlogger.enabled }}
+            - name: pmlogger-storage
+              mountPath: {{ .Values.persistence.pmlogger.mountPath }}
+            {{- end }}
+            {{- if .Values.persistence.pmproxy.enabled }}
+            - name: pmproxy-storage
+              mountPath: {{ .Values.persistence.pmproxy.mountPath }}
+            {{- end }}
+            {{- if .Values.hostMonitoring.enabled }}
+            - name: host-root
+              mountPath: {{ .Values.hostMonitoring.mountPath }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.persistence.pmlogger.enabled }}
+        - name: pmlogger-storage
+          persistentVolumeClaim:
+            claimName: {{ include "pcp.fullname" . }}-pmlogger
+        {{- end }}
+        {{- if .Values.persistence.pmproxy.enabled }}
+        - name: pmproxy-storage
+          persistentVolumeClaim:
+            claimName: {{ include "pcp.fullname" . }}-pmproxy
+        {{- end }}
+        {{- if .Values.hostMonitoring.enabled }}
+        - name: host-root
+          hostPath:
+            path: {{ .Values.hostMonitoring.hostPath }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

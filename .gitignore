@@ -1,0 +1,20 @@
+# Helm chart packaging artifacts
+*.tgz
+
+# Temporary files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# Test artifacts
+test-output/
+reports/
+
+# Dependencies
+charts/*.tgz
+requirements.lock
+
+# Generated files
+*.orig
