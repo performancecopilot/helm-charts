@@ -88,23 +88,3 @@ helm template archive-analysis ./archive-analysis
 # Install in development
 helm install --dry-run --debug pcp ./pcp
 ```
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-Charts are automatically tested on every push using GitHub Actions.
-
-## Support
-
-- **Documentation**: [PCP Website](https://pcp.io)
-- **Issues**: [GitHub Issues](https://github.com/performancecopilot/helm-charts/issues)
-- **Community**: [PCP GitHub](https://github.com/performancecopilot/pcp)
-
-## License
-
-These Helm charts are licensed under the same terms as PCP. See the [PCP repository](https://github.com/performancecopilot/pcp) for details.
