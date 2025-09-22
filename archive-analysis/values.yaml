@@ -45,8 +45,10 @@ service:
   type: ClusterIP
   ports:
     grafana: 3000
+    pcp: 44323
   nodePorts:
     grafana: 30300
+    pcp: 30323
 
 ingress:
   enabled: false

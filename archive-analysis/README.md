@@ -44,6 +44,7 @@ The following table lists the configurable parameters and their default values:
 | `image.pullPolicy` | Container image pull policy | `IfNotPresent` |
 | `service.type` | Kubernetes service type | `ClusterIP` |
 | `service.ports.grafana` | Grafana service port | `3000` |
+| `service.ports.pcp` | PCP REST API service port | `44323` |
 | `ingress.enabled` | Enable ingress | `false` |
 | `persistence.dashboards.enabled` | Enable Grafana dashboards persistence | `true` |
 | `persistence.dashboards.size` | Grafana dashboards storage size | `16Mi` |

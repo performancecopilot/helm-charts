@@ -46,6 +46,9 @@ spec:
             - name: grafana
               containerPort: {{ .Values.service.ports.grafana }}
               protocol: TCP
+            - name: pcp
+              containerPort: {{ .Values.service.ports.pcp }}
+              protocol: TCP
           {{- if .Values.env }}
           env:
             {{- range $key, $value := .Values.env }}

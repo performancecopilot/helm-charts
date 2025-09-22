@@ -14,5 +14,12 @@ spec:
       {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.grafana }}
       nodePort: {{ .Values.service.nodePorts.grafana }}
       {{- end }}
+    - port: {{ .Values.service.ports.pcp }}
+      targetPort: pcp
+      protocol: TCP
+      name: pcp
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.pcp }}
+      nodePort: {{ .Values.service.nodePorts.pcp }}
+      {{- end }}
   selector:
     {{- include "archive-analysis.selectorLabels" . | nindent 4 }}
