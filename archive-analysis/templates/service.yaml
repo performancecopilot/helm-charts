@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "archive-analysis.fullname" . }}
+  labels:
+    {{- include "archive-analysis.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.ports.grafana }}
+      targetPort: grafana
+      protocol: TCP
+      name: grafana
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.grafana }}
+      nodePort: {{ .Values.service.nodePorts.grafana }}
+      {{- end }}
+  selector:
+    {{- include "archive-analysis.selectorLabels" . | nindent 4 }}

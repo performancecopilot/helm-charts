@@ -1,0 +1,130 @@
+# Default values for archive-analysis
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: quay.io/performancecopilot/archive-analysis
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+rbac:
+  create: false
+  privileged: false
+  anyuid: false
+
+podAnnotations: {}
+podLabels:
+  name: archive-analysis
+
+podSecurityContext: {}
+
+securityContext:
+  runAsUser: 1000160000
+  runAsGroup: 1000160000
+
+# Container runtime configuration
+shareProcessNamespace: false
+terminationGracePeriodSeconds: 30
+
+# Network configuration
+hostNetwork: false
+dnsPolicy: ClusterFirst
+
+service:
+  type: ClusterIP
+  ports:
+    grafana: 3000
+  nodePorts:
+    grafana: 30300
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: archive-analysis.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Persistence for Grafana dashboards and PCP archives
+persistence:
+  dashboards:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 16Mi
+    mountPath: /var/lib/grafana
+  archives:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    mountPath: /var/log/pcp
+
+# Environment variables for PCP and Grafana configuration
+env:
+  GF_SECURITY_ADMIN_PASSWORD: "admin"
+  GF_USERS_ALLOW_SIGN_UP: "false"
+  GF_INSTALL_PLUGINS: "grafana-pcp"
+
+# Resource limits and requests
+resources: {}
+
+# Health check configuration
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: grafana
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: grafana
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+autoscaling:
+  enabled: false
+
+# Additional volumes and volume mounts
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Grafana configuration
+grafana:
+  datasources:
+    enabled: true
+    pcp:
+      name: "PCP Live"
+      type: "grafana-pcp"
+      url: "http://localhost:44322"
+      access: "proxy"
+      isDefault: true
+  dashboards:
+    enabled: true
+    defaultDashboards: true

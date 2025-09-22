@@ -1,0 +1,45 @@
+{{- if .Values.persistence.dashboards.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "archive-analysis.fullname" . }}-dashboards
+  labels:
+    {{- include "archive-analysis.labels" . | nindent 4 }}
+    component: dashboards-storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.dashboards.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.dashboards.size }}
+  {{- if .Values.persistence.dashboards.storageClass }}
+  {{- if (eq "-" .Values.persistence.dashboards.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.persistence.dashboards.storageClass }}"
+  {{- end }}
+  {{- end }}
+---
+{{- end }}
+{{- if .Values.persistence.archives.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "archive-analysis.fullname" . }}-archives
+  labels:
+    {{- include "archive-analysis.labels" . | nindent 4 }}
+    component: archives-storage
+spec:
+  accessModes:
+    - {{ .Values.persistence.archives.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.archives.size }}
+  {{- if .Values.persistence.archives.storageClass }}
+  {{- if (eq "-" .Values.persistence.archives.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.persistence.archives.storageClass }}"
+  {{- end }}
+  {{- end }}
+{{- end }}

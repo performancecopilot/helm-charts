@@ -1,0 +1,24 @@
+apiVersion: v2
+name: archive-analysis
+description: A Helm chart for Performance Co-Pilot Archive Analysis with Grafana
+type: application
+version: 0.1.0
+appVersion: "latest"
+home: https://pcp.io
+sources:
+  - https://github.com/performancecopilot/pcp
+  - https://github.com/performancecopilot/helm-charts
+maintainers:
+  - name: Performance Co-Pilot Team
+    url: https://pcp.io
+keywords:
+  - monitoring
+  - performance
+  - metrics
+  - grafana
+  - pcp
+  - archive
+  - analysis
+icon: https://pcp.io/images/pcp-logo.png
+annotations:
+  category: Monitoring
