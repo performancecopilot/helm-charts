@@ -37,6 +37,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              # Enable external access for pmcd and pmproxy
+              sed -i 's/PMCD_LOCAL=1/PMCD_LOCAL=0/' /etc/sysconfig/pmcd
+              sed -i 's/# PMPROXY_LOCAL=1/PMPROXY_LOCAL=0/' /etc/sysconfig/pmproxy
+              echo "PCP external access configured"
+              # Start systemd as usual
+              exec /usr/sbin/init
           ports:
             - name: pmcd-port
               containerPort: {{ .Values.service.ports.pmcd }}

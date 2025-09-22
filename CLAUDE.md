@@ -1,21 +1,22 @@
 # Claude Development Notes
 
-This file contains development context and notes for the Performance Co-Pilot Helm chart.
+This file contains development context and notes for the Performance Co-Pilot Helm charts.
 
 ## Project Overview
 
-This is a Helm chart for deploying Performance Co-Pilot (PCP) on Kubernetes. PCP is a system performance analysis toolkit that provides real-time and historical metrics collection.
+These Helm charts are for deploying Performance Co-Pilot (PCP) services on Kubernetes. PCP is a system performance analysis toolkit that provides real-time and historical metrics collection.
 
 ## References
 
 - [PCP Website](https://pcp.io) - Official documentation and guides
 - [PCP GitHub Repository](https://github.com/performancecopilot/pcp) - Source code and issues
+- [Releases and macOS DMG](https://github.com/performancecopilot/pcp/releases) - Pre-built dmg packages
 - [PCP Package Repository](https://packagecloud.io/performancecopilot/pcp) - Pre-built deb/rpm packages
-- [Container Documentation](./container/README.md) - PCP container usage and configuration
+- [Container Documentation](https://github.com/performancecopilot/pcp/blob/main/build/containers/README.md) - PCP containers usage and configuration
 
 ## Repository Context
 
-This Helm chart will be hosted at the PCP package repository (packagecloud.io/performancecopilot/pcp) alongside the deb and rpm packages.
+These Helm charts will be hosted at the PCP container repository (quay.io/performancecopilot) alongside the container images.  There are two Helm charts - one for the main PCP container and the other for the archive-analysis container containing Grafana and grafana-pcp.
 
 ## Key Design Decisions
 
@@ -24,9 +25,9 @@ This Helm chart will be hosted at the PCP package repository (packagecloud.io/pe
 - Autoscaling is disabled since horizontal scaling doesn't make sense for system monitoring
 
 ### Container Integration
-- Based on `quay.io/performancecopilot/pcp:latest` container
-- Uses systemd init (`/usr/sbin/init`) requiring special Kubernetes handling
-- Privileged mode required for full system access
+- Based on `quay.io/performancecopilot/pcp:latest` and `quay.io/performancecopilot/archive-analysis:latest` containers
+- Using systemd init (`/usr/sbin/init`) requiring special Kubernetes handling
+- Privileged mode required for full system access (for the pcp container only)
 
 ### Storage Strategy
 - Persistent volumes for `/var/log/pcp/pmlogger` (1Gi) and `/var/log/pcp/pmproxy` (1Gi)

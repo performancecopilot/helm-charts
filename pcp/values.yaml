@@ -16,6 +16,11 @@ serviceAccount:
   annotations: {}
   name: ""
 
+rbac:
+  create: true
+  privileged: true
+  anyuid: false
+
 podAnnotations: {}
 podLabels:
   name: pcp
@@ -24,11 +29,15 @@ podSecurityContext: {}
 
 securityContext:
   privileged: true
+  allowPrivilegeEscalation: true
+  runAsNonRoot: false
+  seccompProfile:
+    type: "Unconfined"
 
 # Container runtime configuration
 # PCP container uses systemd init and requires special handling
 shareProcessNamespace: false
-terminationGracePeriodSeconds: 30
+terminationGracePeriodSeconds: 15
 
 # Network configuration
 hostNetwork: false
@@ -38,6 +47,9 @@ service:
   ports:
     pmcd: 44321
     pmproxy: 44322
+  nodePorts:
+    pmcd: 30321
+    pmproxy: 30322
 
 ingress:
   enabled: false
