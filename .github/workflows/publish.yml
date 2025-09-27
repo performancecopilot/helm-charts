@@ -9,8 +9,8 @@ on:
       - 'archive-analysis/**'
 
 env:
-  REGISTRY_GHCR: ghcr.io/performancecopilot
-  REGISTRY_QUAY: quay.io/performancecopilot
+  REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
+  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
 
 jobs:
   publish:
@@ -80,22 +80,10 @@ jobs:
 
       - name: Push to GitHub Container Registry
         run: |
-          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}/helm-chart-pcp
-          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}/helm-chart-archive-analysis
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
 
       - name: Push to Quay.io
         run: |
-          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}/helm-chart-pcp
-          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}/helm-chart-archive-analysis
-
-      - name: Run chart-releaser for pcp.io
-        uses: helm/chart-releaser-action@v1.6.0
-        with:
-          charts_dir: .
-          config: .github/cr.yaml
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-        if: success()
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}

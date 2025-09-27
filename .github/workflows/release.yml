@@ -6,8 +6,8 @@ on:
       - 'v*'
 
 env:
-  REGISTRY_GHCR: ghcr.io/performancecopilot
-  REGISTRY_QUAY: quay.io/performancecopilot
+  REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
+  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
 
 jobs:
   release:
@@ -65,12 +65,12 @@ jobs:
           helm package archive-analysis/
 
           # Push to GitHub Container Registry
-          helm push pcp-${VERSION}.tgz oci://${REGISTRY_GHCR}/helm-chart-pcp
-          helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_GHCR}/helm-chart-archive-analysis
+          helm push pcp-${VERSION}.tgz oci://${REGISTRY_GHCR}
+          helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_GHCR}
 
           # Push to Quay.io
-          helm push pcp-${VERSION}.tgz oci://${REGISTRY_QUAY}/helm-chart-pcp
-          helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_QUAY}/helm-chart-archive-analysis
+          helm push pcp-${VERSION}.tgz oci://${REGISTRY_QUAY}
+          helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_QUAY}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -89,21 +89,14 @@ jobs:
 
             #### From GitHub Container Registry:
             ```bash
-            helm install pcp oci://ghcr.io/performancecopilot/helm-chart-pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://ghcr.io/performancecopilot/helm-chart-archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version ${{ github.ref_name }}
+            helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version ${{ github.ref_name }}
             ```
 
             #### From Quay.io:
             ```bash
-            helm install pcp oci://quay.io/performancecopilot/helm-chart-pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://quay.io/performancecopilot/helm-chart-archive-analysis --version ${{ github.ref_name }}
-            ```
-
-            #### From Helm repository:
-            ```bash
-            helm repo add performancecopilot https://pcp.io/helm-charts
-            helm install pcp performancecopilot/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis performancecopilot/archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://quay.io/performancecopilot/helm-charts/pcp --version ${{ github.ref_name }}
+            helm install archive-analysis oci://quay.io/performancecopilot/helm-charts/archive-analysis --version ${{ github.ref_name }}
             ```
 
             #### From source:

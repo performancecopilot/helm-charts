@@ -30,29 +30,21 @@ helm install archive-analysis performancecopilot/archive-analysis
 
 ## Installation Methods
 
-### 1. From Helm Repository (Recommended)
-
-```bash
-helm repo add performancecopilot https://pcp.io/helm-charts
-helm install pcp performancecopilot/pcp
-helm install archive-analysis performancecopilot/archive-analysis
-```
-
-### 2. From OCI Registry
+### 1. From OCI Registry (Recommended)
 
 #### GitHub Container Registry
 ```bash
-helm install pcp oci://ghcr.io/performancecopilot/helm-chart-pcp
-helm install archive-analysis oci://ghcr.io/performancecopilot/helm-chart-archive-analysis
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis
 ```
 
 #### Quay.io
 ```bash
-helm install pcp oci://quay.io/performancecopilot/helm-chart-pcp
-helm install archive-analysis oci://quay.io/performancecopilot/helm-chart-archive-analysis
+helm install pcp oci://quay.io/performancecopilot/helm-charts/pcp
+helm install archive-analysis oci://quay.io/performancecopilot/helm-charts/archive-analysis
 ```
 
-### 3. From Source
+### 2. From Source
 
 ```bash
 git clone https://github.com/performancecopilot/helm-charts.git
