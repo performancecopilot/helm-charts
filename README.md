@@ -9,25 +9,6 @@ Official Helm charts for deploying [Performance Co-Pilot (PCP)](https://pcp.io) 
 | [pcp](./pcp/) | Performance Co-Pilot system monitoring | ![Version](https://img.shields.io/badge/version-0.1.0-blue) |
 | [archive-analysis](./archive-analysis/) | PCP Archive Analysis with Grafana | ![Version](https://img.shields.io/badge/version-0.1.0-blue) |
 
-## Quick Start
-
-### Add Helm Repository
-
-```bash
-helm repo add performancecopilot https://pcp.io/helm-charts
-helm repo update
-```
-
-### Install Charts
-
-```bash
-# Install PCP for system monitoring
-helm install pcp performancecopilot/pcp
-
-# Install Archive Analysis for historical data analysis
-helm install archive-analysis performancecopilot/archive-analysis
-```
-
 ## Installation Methods
 
 ### 1. From OCI Registry (Recommended)
