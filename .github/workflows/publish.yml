@@ -1,0 +1,101 @@
+name: Publish Charts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pcp/**'
+      - 'archive-analysis/**'
+
+env:
+  REGISTRY_GHCR: ghcr.io/performancecopilot
+  REGISTRY_QUAY: quay.io/performancecopilot
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Add helm repos
+        run: |
+          helm repo add stable https://charts.helm.sh/stable
+          helm repo update
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Quay.io
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Generate version from commit
+        id: version
+        run: |
+          # Use commit short hash as version for development builds
+          VERSION="0.1.0-dev.$(git rev-parse --short HEAD)"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+      - name: Update chart versions
+        run: |
+          # Update chart versions with dev version
+          sed -i "s/^version:.*/version: ${{ steps.version.outputs.VERSION }}/" pcp/Chart.yaml
+          sed -i "s/^version:.*/version: ${{ steps.version.outputs.VERSION }}/" archive-analysis/Chart.yaml
+
+          # Also update appVersion to track the commit
+          sed -i "s/^appVersion:.*/appVersion: \"${{ steps.version.outputs.VERSION }}\"/" pcp/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: \"${{ steps.version.outputs.VERSION }}\"/" archive-analysis/Chart.yaml
+
+      - name: Package charts
+        run: |
+          helm package pcp/
+          helm package archive-analysis/
+
+      - name: Push to GitHub Container Registry
+        run: |
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
+
+      - name: Push to Quay.io
+        run: |
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}
+
+      - name: Run chart-releaser for pcp.io
+        uses: helm/chart-releaser-action@v1.6.0
+        with:
+          charts_dir: .
+          config: .github/cr.yaml
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        if: success()

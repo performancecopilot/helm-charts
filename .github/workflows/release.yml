@@ -101,9 +101,9 @@ jobs:
 
             #### From Helm repository:
             ```bash
-            helm repo add pcp https://pcp.io/helm-charts
-            helm install pcp pcp/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis pcp/archive-analysis --version ${{ github.ref_name }}
+            helm repo add performancecopilot https://pcp.io/helm-charts
+            helm install pcp performancecopilot/pcp --version ${{ github.ref_name }}
+            helm install archive-analysis performancecopilot/archive-analysis --version ${{ github.ref_name }}
             ```
 
             #### From source:
