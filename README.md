@@ -14,7 +14,7 @@ Official Helm charts for deploying [Performance Co-Pilot (PCP)](https://pcp.io) 
 ### Add Helm Repository
 
 ```bash
-helm repo add pcp https://pcp.io/helm-charts
+helm repo add performancecopilot https://pcp.io/helm-charts
 helm repo update
 ```
 
@@ -22,10 +22,10 @@ helm repo update
 
 ```bash
 # Install PCP for system monitoring
-helm install pcp pcp/pcp
+helm install pcp performancecopilot/pcp
 
 # Install Archive Analysis for historical data analysis
-helm install archive-analysis pcp/archive-analysis
+helm install archive-analysis performancecopilot/archive-analysis
 ```
 
 ## Installation Methods
@@ -33,9 +33,9 @@ helm install archive-analysis pcp/archive-analysis
 ### 1. From Helm Repository (Recommended)
 
 ```bash
-helm repo add pcp https://pcp.io/helm-charts
-helm install my-pcp pcp/pcp
-helm install my-archive-analysis pcp/archive-analysis
+helm repo add performancecopilot https://pcp.io/helm-charts
+helm install pcp performancecopilot/pcp
+helm install archive-analysis performancecopilot/archive-analysis
 ```
 
 ### 2. From OCI Registry
