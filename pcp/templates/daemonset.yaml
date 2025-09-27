@@ -1,11 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: {{ include "pcp.fullname" . }}
   labels:
     {{- include "pcp.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "pcp.selectorLabels" . | nindent 6 }}
@@ -90,13 +89,15 @@ spec:
         {{- end }}
         {{- if .Values.persistence.pmlogger.enabled }}
         - name: pmlogger-storage
-          persistentVolumeClaim:
-            claimName: {{ include "pcp.fullname" . }}-pmlogger
+          hostPath:
+            path: {{ .Values.persistence.pmlogger.hostPath }}
+            type: DirectoryOrCreate
         {{- end }}
         {{- if .Values.persistence.pmproxy.enabled }}
         - name: pmproxy-storage
-          persistentVolumeClaim:
-            claimName: {{ include "pcp.fullname" . }}-pmproxy
+          hostPath:
+            path: {{ .Values.persistence.pmproxy.hostPath }}
+            type: DirectoryOrCreate
         {{- end }}
         {{- if .Values.hostMonitoring.enabled }}
         - name: host-root

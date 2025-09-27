@@ -1,5 +1,5 @@
 # Default values for Performance Co-Pilot
-replicaCount: 1
+# PCP runs as a DaemonSet to monitor each node in the cluster
 
 image:
   repository: quay.io/performancecopilot/pcp
@@ -82,25 +82,19 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
 
-# Performance Co-Pilot typically runs as a single instance
-# Multiple replicas don't make sense for system monitoring
-autoscaling:
-  enabled: false
+# DaemonSet automatically scales with cluster nodes
+# No manual scaling configuration needed
 
-# Persistent storage for PCP logs
+# Persistent storage for PCP logs using hostPath for DaemonSet
 persistence:
   pmlogger:
     enabled: true
-    storageClass: ""
-    accessMode: ReadWriteOnce
-    size: 1Gi
     mountPath: /var/log/pcp/pmlogger
+    hostPath: /var/log/pcp/pmlogger
   pmproxy:
     enabled: true
-    storageClass: ""
-    accessMode: ReadWriteOnce
-    size: 1Gi
     mountPath: /var/log/pcp/pmproxy
+    hostPath: /var/log/pcp/pmproxy
 
 # Host monitoring configuration
 hostMonitoring:
