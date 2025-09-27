@@ -1,12 +1,13 @@
 name: Pages
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'pcp/**'
-      - 'archive-analysis/**'
+  # Temporarily disabled - no GitHub Pages setup yet
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'pcp/**'
+  #     - 'archive-analysis/**'
 
 permissions:
   contents: write
