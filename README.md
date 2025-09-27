@@ -42,14 +42,14 @@ helm install archive-analysis performancecopilot/archive-analysis
 
 #### GitHub Container Registry
 ```bash
-helm install pcp oci://ghcr.io/performancecopilot/pcp
-helm install archive-analysis oci://ghcr.io/performancecopilot/archive-analysis
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis
 ```
 
 #### Quay.io
 ```bash
-helm install pcp oci://quay.io/performancecopilot/pcp
-helm install archive-analysis oci://quay.io/performancecopilot/archive-analysis
+helm install pcp oci://quay.io/performancecopilot/helm-charts/pcp
+helm install archive-analysis oci://quay.io/performancecopilot/helm-charts/archive-analysis
 ```
 
 ### 3. From Source

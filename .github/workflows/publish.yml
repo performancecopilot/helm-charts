@@ -9,8 +9,8 @@ on:
       - 'archive-analysis/**'
 
 env:
-  REGISTRY_GHCR: ghcr.io/performancecopilot
-  REGISTRY_QUAY: quay.io/performancecopilot
+  REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
+  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
 
 jobs:
   publish:
