@@ -9,8 +9,8 @@ on:
       - 'archive-analysis/**'
 
 env:
-  REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
-  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
+  REGISTRY_GHCR: ghcr.io/performancecopilot
+  REGISTRY_QUAY: quay.io/performancecopilot
 
 jobs:
   publish:
@@ -80,13 +80,13 @@ jobs:
 
       - name: Push to GitHub Container Registry
         run: |
-          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
-          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}/helm-chart-pcp
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_GHCR}/helm-chart-archive-analysis
 
       - name: Push to Quay.io
         run: |
-          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}
-          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}
+          helm push pcp-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}/helm-chart-pcp
+          helm push archive-analysis-${{ steps.version.outputs.VERSION }}.tgz oci://${REGISTRY_QUAY}/helm-chart-archive-analysis
 
       - name: Run chart-releaser for pcp.io
         uses: helm/chart-releaser-action@v1.6.0
