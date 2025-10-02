@@ -49,11 +49,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Quay.io
-        uses: docker/login-action@v3
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
+        run: |
+          helm registry login -u ${{ secrets.QUAY_USERNAME }} -p ${{ secrets.QUAY_PASSWORD }} ${REGISTRY_QUAY}
 
       - name: Generate version from commit
         id: version
