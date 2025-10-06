@@ -21,8 +21,8 @@ helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archi
 
 #### Quay.io
 ```bash
-helm install pcp oci://quay.io/performancecopilot/helm-charts/pcp
-helm install archive-analysis oci://quay.io/performancecopilot/helm-charts/archive-analysis
+helm install pcp oci://quay.io/performancecopilot-helm-charts/pcp
+helm install archive-analysis oci://quay.io/performancecopilot-helm-charts/archive-analysis
 ```
 
 ### 2. From Source

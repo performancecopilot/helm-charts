@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
-  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
+  REGISTRY_QUAY: quay.io/performancecopilot-helm-charts
 
 jobs:
   release:
@@ -89,14 +89,14 @@ jobs:
 
             #### From GitHub Container Registry:
             ```bash
-            helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://${REGISTRY_GHCR}/pcp --version ${{ github.ref_name }}
+            helm install archive-analysis oci://${REGISTRY_GHCR}/archive-analysis --version ${{ github.ref_name }}
             ```
 
             #### From Quay.io:
             ```bash
-            helm install pcp oci://quay.io/performancecopilot/helm-charts/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://quay.io/performancecopilot/helm-charts/archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://${REGISTRY_QUAY}/pcp --version ${{ github.ref_name }}
+            helm install archive-analysis oci://${REGISTRY_QUAY}/archive-analysis --version ${{ github.ref_name }}
             ```
 
             #### From source:

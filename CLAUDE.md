@@ -16,7 +16,7 @@ These Helm charts are for deploying Performance Co-Pilot (PCP) services on Kuber
 
 ## Repository Context
 
-These Helm charts will be hosted at the PCP container repository (quay.io/performancecopilot) alongside the container images.  There are two Helm charts - one for the main PCP container and the other for the archive-analysis container containing Grafana and grafana-pcp.
+These Helm charts will be hosted at the PCP helm chart repository (quay.io/performancecopilot-helm-charts) alongside the container images (quay.io/performancecopilot).  There are two Helm charts - one for the main PCP container and the other for the archive-analysis container containing Grafana and grafana-pcp.
 
 ## Key Design Decisions
 

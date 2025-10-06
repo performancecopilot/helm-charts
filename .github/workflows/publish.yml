@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
-  REGISTRY_QUAY: quay.io/performancecopilot/helm-charts
+  REGISTRY_QUAY: quay.io/performancecopilot-helm-charts
 
 jobs:
   publish:
