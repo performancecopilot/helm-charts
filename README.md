@@ -37,6 +37,21 @@ helm install pcp oci://quay.io/performancecopilot-helm-charts/pcp --version 1.0.
 helm install archive-analysis oci://quay.io/performancecopilot-helm-charts/archive-analysis --version 1.0.0
 ```
 
+### From Helm Repository (Traditional Method)
+
+```bash
+# Add the PCP Helm repository
+helm repo add pcp https://performancecopilot.github.io/helm-charts/
+helm repo update
+
+# Install charts
+helm install pcp pcp/pcp -n monitoring --create-namespace
+helm install archive-analysis pcp/archive-analysis -n monitoring --create-namespace
+
+# Or install specific version
+helm install pcp pcp/pcp --version 1.0.0 -n monitoring --create-namespace
+```
+
 ### From Source (Development/Testing)
 
 If you need the latest development version or the OCI registries are not yet available:
