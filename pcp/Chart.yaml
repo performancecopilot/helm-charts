@@ -2,6 +2,22 @@ apiVersion: v2
 name: pcp
 description: A Helm chart for Performance Co-Pilot
 type: application
-version: 0.1.0
+version: 1.0.0
 appVersion: "latest"
+home: https://pcp.io
+sources:
+  - https://github.com/performancecopilot/pcp
+  - https://github.com/performancecopilot/helm-charts
+maintainers:
+  - name: Performance Co-Pilot Team
+    url: https://pcp.io
+keywords:
+  - monitoring
+  - performance
+  - metrics
+  - pcp
+  - system-monitoring
+  - observability
 icon: https://raw.githubusercontent.com/performancecopilot/pcp/main/images/pcpicon-light.png
+annotations:
+  category: Monitoring

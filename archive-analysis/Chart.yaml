@@ -2,7 +2,7 @@ apiVersion: v2
 name: archive-analysis
 description: A Helm chart for Performance Co-Pilot Archive Analysis with Grafana
 type: application
-version: 0.1.0
+version: 1.0.0
 appVersion: "latest"
 home: https://pcp.io
 sources:

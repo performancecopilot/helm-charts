@@ -18,19 +18,46 @@ Pre-built packages are available at [packagecloud.io/performancecopilot/pcp](htt
 ## Prerequisites
 
 - Kubernetes 1.19+
-- Helm 3.0+
+- Helm 3.8+ (required for OCI registry support)
 - PV provisioner support in the underlying infrastructure (for persistent storage)
 
 ## Installing the Chart
 
+### From OCI Registry (Recommended)
+
 ```bash
-helm install pcp ./pcp
+# Install specific version from GitHub Container Registry
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 -n monitoring --create-namespace
+
+# Or from Quay.io
+helm install pcp oci://quay.io/performancecopilot-helm-charts/pcp --version 1.0.0 -n monitoring --create-namespace
+```
+
+### From Source
+
+```bash
+# Clone repository
+git clone https://github.com/performancecopilot/helm-charts.git
+cd helm-charts
+
+# Install from local chart
+helm install pcp ./pcp -n monitoring --create-namespace
+```
+
+### From GitHub Release
+
+```bash
+# Download packaged chart
+wget https://github.com/performancecopilot/helm-charts/releases/download/v1.0.0/pcp-1.0.0.tgz
+
+# Install from package
+helm install pcp pcp-1.0.0.tgz -n monitoring --create-namespace
 ```
 
 ## Uninstalling the Chart
 
 ```bash
-helm uninstall pcp
+helm uninstall pcp -n monitoring
 ```
 
 ## Configuration
@@ -74,21 +101,31 @@ helm install pcp ./pcp \
 
 ### Basic deployment:
 ```bash
-helm install pcp ./pcp
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 -n monitoring --create-namespace
 ```
 
 ### With custom agents:
 ```bash
-helm install pcp ./pcp --set env.PCP_DOMAIN_AGENTS="postgresql,apache"
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 \
+  --set env.PCP_DOMAIN_AGENTS="postgresql,apache" \
+  -n monitoring --create-namespace
 ```
 
 ### Host monitoring with eBPF:
 ```bash
-helm install pcp ./pcp \
+helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 \
   --set hostMonitoring.enabled=true \
   --set hostNetwork=true \
   --set env.HOST_MOUNT="/host" \
-  --set env.PCP_DOMAIN_AGENTS="bpf,bpftrace"
+  --set env.PCP_DOMAIN_AGENTS="bpf,bpftrace" \
+  -n monitoring --create-namespace
+```
+
+### From source (development):
+```bash
+git clone https://github.com/performancecopilot/helm-charts.git
+cd helm-charts
+helm install pcp ./pcp -n monitoring --create-namespace
 ```
 
 ## Notes

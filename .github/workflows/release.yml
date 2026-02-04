@@ -51,9 +51,11 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD }}
 
       - name: Package and push charts
+        id: package
         run: |
           # Extract version from tag (remove 'v' prefix)
           VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Releasing version: $VERSION"
 
           # Update chart versions
@@ -82,25 +84,33 @@ jobs:
             ## Helm Charts Release
 
             This release contains the following charts:
-            - PCP (Performance Co-Pilot)
-            - Archive Analysis (PCP with Grafana)
+            - PCP (Performance Co-Pilot) - v${{ steps.package.outputs.VERSION }}
+            - Archive Analysis (PCP with Grafana) - v${{ steps.package.outputs.VERSION }}
 
             ### Installation
 
             #### From GitHub Container Registry:
             ```bash
-            helm install pcp oci://${REGISTRY_GHCR}/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://${REGISTRY_GHCR}/archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://${{ env.REGISTRY_GHCR }}/pcp --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
+            helm install archive-analysis oci://${{ env.REGISTRY_GHCR }}/archive-analysis --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
             ```
 
             #### From Quay.io:
             ```bash
-            helm install pcp oci://${REGISTRY_QUAY}/pcp --version ${{ github.ref_name }}
-            helm install archive-analysis oci://${REGISTRY_QUAY}/archive-analysis --version ${{ github.ref_name }}
+            helm install pcp oci://${{ env.REGISTRY_QUAY }}/pcp --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
+            helm install archive-analysis oci://${{ env.REGISTRY_QUAY }}/archive-analysis --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
+            ```
+
+            #### From packaged chart (attached to this release):
+            ```bash
+            wget https://github.com/performancecopilot/helm-charts/releases/download/${{ github.ref_name }}/pcp-${{ steps.package.outputs.VERSION }}.tgz
+            helm install pcp pcp-${{ steps.package.outputs.VERSION }}.tgz -n monitoring --create-namespace
             ```
 
             #### From source:
             ```bash
-            helm install pcp ./pcp
-            helm install archive-analysis ./archive-analysis
+            git clone https://github.com/performancecopilot/helm-charts.git
+            cd helm-charts
+            git checkout ${{ github.ref_name }}
+            helm install pcp ./pcp -n monitoring --create-namespace
             ```

@@ -16,20 +16,45 @@ This chart deploys the PCP Archive Analysis container which includes Grafana wit
 ## Prerequisites
 
 - Kubernetes 1.19+
-- Helm 3.0+
+- Helm 3.8+ (required for OCI registry support)
 
 ## Installing the Chart
 
-```bash
-# Add the PCP helm repository (when available)
-helm repo add pcp https://performancecopilot.github.io/helm-charts/
+### From OCI Registry (Recommended)
 
-# Install the chart
-helm install archive-analysis ./archive-analysis
+```bash
+# Install specific version from GitHub Container Registry
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 -n monitoring --create-namespace
+
+# Or from Quay.io
+helm install archive-analysis oci://quay.io/performancecopilot-helm-charts/archive-analysis --version 1.0.0 -n monitoring --create-namespace
 ```
 
+### From Source
+
 ```bash
-helm uninstall archive-analysis
+# Clone repository
+git clone https://github.com/performancecopilot/helm-charts.git
+cd helm-charts
+
+# Install from local chart
+helm install archive-analysis ./archive-analysis -n monitoring --create-namespace
+```
+
+### From GitHub Release
+
+```bash
+# Download packaged chart
+wget https://github.com/performancecopilot/helm-charts/releases/download/v1.0.0/archive-analysis-1.0.0.tgz
+
+# Install from package
+helm install archive-analysis archive-analysis-1.0.0.tgz -n monitoring --create-namespace
+```
+
+## Uninstalling the Chart
+
+```bash
+helm uninstall archive-analysis -n monitoring
 ```
 
 ## Configuration
@@ -57,32 +82,43 @@ The following table lists the configurable parameters and their default values:
 ### Basic Installation
 
 ```bash
-helm install archive-analysis ./archive-analysis
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 -n monitoring --create-namespace
 ```
 
 ### With Custom Grafana Password
 
 ```bash
-helm install archive-analysis ./archive-analysis \
-  --set env.GF_SECURITY_ADMIN_PASSWORD=mypassword
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 \
+  --set env.GF_SECURITY_ADMIN_PASSWORD=mypassword \
+  -n monitoring --create-namespace
 ```
 
 ### With Ingress Enabled
 
 ```bash
-helm install archive-analysis ./archive-analysis \
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 \
   --set ingress.enabled=true \
   --set ingress.hosts[0].host=grafana.example.com \
-  --set ingress.hosts[0].paths[0].path=/
+  --set ingress.hosts[0].paths[0].path=/ \
+  -n monitoring --create-namespace
 ```
 
 ### With Custom Storage
 
 ```bash
-helm install archive-analysis ./archive-analysis \
+helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 \
   --set persistence.dashboards.size=32Mi \
   --set persistence.archives.size=5Gi \
-  --set persistence.dashboards.storageClass=fast-ssd
+  --set persistence.dashboards.storageClass=fast-ssd \
+  -n monitoring --create-namespace
+```
+
+### From Source (Development)
+
+```bash
+git clone https://github.com/performancecopilot/helm-charts.git
+cd helm-charts
+helm install archive-analysis ./archive-analysis -n monitoring --create-namespace
 ```
 
 ## Accessing Grafana
@@ -91,13 +127,15 @@ After installation, access Grafana using:
 
 1. **Port Forward** (default):
    ```bash
-   kubectl port-forward svc/archive-analysis 3000:3000
+   kubectl port-forward -n monitoring svc/archive-analysis 3000:3000
    ```
    Then open http://localhost:3000
 
 2. **NodePort Service**:
    ```bash
-   helm upgrade archive-analysis ./archive-analysis --set service.type=NodePort
+   helm upgrade archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 \
+     --set service.type=NodePort \
+     -n monitoring
    ```
 
 3. **Ingress** (if enabled):
