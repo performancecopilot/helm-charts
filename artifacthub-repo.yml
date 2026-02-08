@@ -1,6 +1,6 @@
 # Artifact Hub repository metadata file
 # https://github.com/artifacthub/hub/blob/master/docs/metadata/artifacthub-repo.yml
-repositoryID: performancecopilot-helm-charts
+repositoryID: d11ee147-86be-44e6-bd58-6320cc5228ac
 owners:
   - name: Performance Co-Pilot Team
     email: pcp@groups.io
