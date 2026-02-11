@@ -44,8 +44,8 @@ spec:
               sed -i 's/PMCD_LOCAL=1/PMCD_LOCAL=0/' /etc/sysconfig/pmcd
               sed -i 's/# PMPROXY_LOCAL=1/PMPROXY_LOCAL=0/' /etc/sysconfig/pmproxy
               echo "PCP external access configured"
-              # Start systemd as usual
-              exec /usr/sbin/init
+              # container-entrypoint for PCP_DOMAIN_AGENTS, then start systemd
+              exec /usr/bin/container-entrypoint /usr/sbin/init
           ports:
             - name: pmcd-port
               containerPort: {{ .Values.service.ports.pmcd }}
