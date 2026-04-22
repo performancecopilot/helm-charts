@@ -193,9 +193,11 @@ Before releasing, ensure:
 
 ## ArtifactHub Integration
 
-Charts are automatically discovered by ArtifactHub via:
-1. The `artifacthub-repo.yml` file in the repository root
-2. Publishing to GitHub Container Registry with proper metadata
+Charts are published to [ArtifactHub](https://artifacthub.io/packages/search?org=pcp) under:
+- **Org**: `pcp` (Performance Co-Pilot), owned by `natoscott`
+- **Repository**: `pcp-helm-charts`, pointing at `https://performancecopilot.github.io/helm-charts/`
 
-No manual action required - ArtifactHub will scan and index releases automatically.
+ArtifactHub scans the GitHub Pages URL automatically on each push to `main` — no manual action needed.
+
+The `repositoryID` in `artifacthub-repo.yml` links this repo to the ArtifactHub registration. If the repository is ever re-created on ArtifactHub, update that ID and push to `main`.
 
