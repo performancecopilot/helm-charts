@@ -1,6 +1,6 @@
 # Artifact Hub repository metadata file
 # https://github.com/artifacthub/hub/blob/master/docs/metadata/artifacthub-repo.yml
-repositoryID: d11ee147-86be-44e6-bd58-6320cc5228ac
+repositoryID: d905f7ba-c6b0-4f8f-963e-5ebf76663056
 owners:
   - name: Performance Co-Pilot Team
     email: pcp@groups.io
