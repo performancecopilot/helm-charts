@@ -5,7 +5,7 @@ This document describes the process for creating and publishing new releases of 
 ## Overview
 
 The PCP Helm charts are published to multiple distribution channels:
-- **OCI Registries**: GitHub Container Registry (ghcr.io) and Quay.io
+- **OCI Registry**: GitHub Container Registry (ghcr.io)
 - **GitHub Releases**: Packaged chart files attached to GitHub releases
 - **ArtifactHub**: Automatic discovery via artifacthub-repo.yml
 
@@ -62,8 +62,8 @@ Once the tag is pushed, the GitHub Actions workflow (`.github/workflows/release.
 2. ✅ Extracts version from the tag (removes 'v' prefix)
 3. ✅ Updates Chart.yaml versions to match the tag
 4. ✅ Packages both charts (`helm package`)
-5. ✅ Logs into GitHub Container Registry and Quay.io
-6. ✅ Pushes charts to both OCI registries
+5. ✅ Logs into GitHub Container Registry
+6. ✅ Pushes charts to GitHub Container Registry
 7. ✅ Creates a GitHub Release with:
    - Packaged chart files (`.tgz`)
    - Auto-generated release notes
@@ -79,9 +79,6 @@ gh release list --repo performancecopilot/helm-charts
 
 # Test installation from GitHub Container Registry
 helm install pcp-test oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 -n test --create-namespace
-
-# Test installation from Quay.io
-helm install pcp-test oci://quay.io/performancecopilot-helm-charts/pcp --version 1.0.0 -n test --create-namespace
 
 # Clean up test installation
 helm uninstall pcp-test -n test
@@ -130,18 +127,7 @@ helm push pcp-${VERSION}.tgz oci://ghcr.io/performancecopilot/helm-charts
 helm push archive-analysis-${VERSION}.tgz oci://ghcr.io/performancecopilot/helm-charts
 ```
 
-### 3. Push to Quay.io
-
-```bash
-# Login to Quay.io
-helm registry login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
-
-# Push charts
-helm push pcp-${VERSION}.tgz oci://quay.io/performancecopilot-helm-charts
-helm push archive-analysis-${VERSION}.tgz oci://quay.io/performancecopilot-helm-charts
-```
-
-### 4. Create GitHub Release
+### 3. Create GitHub Release
 
 ```bash
 # Create release with gh CLI
@@ -159,14 +145,6 @@ The following secrets must be configured in the GitHub repository settings:
 | Secret | Description | Required For |
 |--------|-------------|--------------|
 | `GITHUB_TOKEN` | Automatic GitHub token | GHCR publishing, releases |
-| `QUAY_USERNAME` | Quay.io username | Quay.io publishing |
-| `QUAY_PASSWORD` | Quay.io password or robot token | Quay.io publishing |
-
-To configure Quay.io credentials:
-
-1. Go to GitHub repository Settings → Secrets and variables → Actions
-2. Add `QUAY_USERNAME` and `QUAY_PASSWORD` repository secrets
-3. For Quay.io, it's recommended to use a [Robot Account](https://docs.quay.io/glossary/robot-accounts.html)
 
 ## Rollback Process
 
@@ -223,12 +201,6 @@ No manual action required - ArtifactHub will scan and index releases automatical
 
 ## Troubleshooting
 
-### Workflow Fails on Push
-
-**Error**: `Error: failed to authorize: failed to fetch oauth token`
-
-**Solution**: Verify Quay.io credentials in repository secrets.
-
 ### Chart Not Appearing in Registry
 
 **Error**: `repository not found`
@@ -248,6 +220,5 @@ No manual action required - ArtifactHub will scan and index releases automatical
 
 - [Helm OCI Documentation](https://helm.sh/docs/topics/registries/)
 - [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-- [Quay.io Documentation](https://docs.quay.io/)
 - [ArtifactHub](https://artifacthub.io)
 - [Semantic Versioning](https://semver.org/)

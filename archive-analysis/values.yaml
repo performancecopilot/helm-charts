@@ -4,7 +4,7 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/performancecopilot/archive-analysis
+  repository: ghcr.io/performancecopilot/archive-analysis
   pullPolicy: IfNotPresent
   tag: ""
 

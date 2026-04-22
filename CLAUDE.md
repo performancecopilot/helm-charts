@@ -16,7 +16,7 @@ These Helm charts are for deploying Performance Co-Pilot (PCP) services on Kuber
 
 ## Repository Context
 
-These Helm charts will be hosted at the PCP helm chart repository (quay.io/performancecopilot-helm-charts) alongside the container images (quay.io/performancecopilot).  There are two Helm charts - one for the main PCP container and the other for the archive-analysis container containing Grafana and grafana-pcp.
+These Helm charts are hosted at the PCP helm chart repository (ghcr.io/performancecopilot/helm-charts) alongside the container images (ghcr.io/performancecopilot). There are two Helm charts - one for the main PCP container and the other for the archive-analysis container containing Grafana and grafana-pcp.
 
 ## Key Design Decisions
 
@@ -25,7 +25,7 @@ These Helm charts will be hosted at the PCP helm chart repository (quay.io/perfo
 - Autoscaling is disabled since horizontal scaling doesn't make sense for system monitoring
 
 ### Container Integration
-- Based on `quay.io/performancecopilot/pcp:latest` and `quay.io/performancecopilot/archive-analysis:latest` containers
+- Based on `ghcr.io/performancecopilot/pcp:latest` and `ghcr.io/performancecopilot/archive-analysis:latest` containers
 - Using systemd init (`/usr/sbin/init`) requiring special Kubernetes handling
 - Privileged mode required for full system access (for the pcp container only)
 

@@ -20,7 +20,6 @@ Official Helm charts for deploying [Performance Co-Pilot (PCP)](https://pcp.io) 
 
 After a versioned release has been published, you can install charts from OCI registries:
 
-#### GitHub Container Registry
 ```bash
 # Install specific version
 helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0
@@ -28,13 +27,6 @@ helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archi
 
 # Or use version constraints
 helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version ">=1.0.0 <2.0.0"
-```
-
-#### Quay.io
-```bash
-# Install specific version
-helm install pcp oci://quay.io/performancecopilot-helm-charts/pcp --version 1.0.0
-helm install archive-analysis oci://quay.io/performancecopilot-helm-charts/archive-analysis --version 1.0.0
 ```
 
 ### From Helm Repository (Traditional Method)

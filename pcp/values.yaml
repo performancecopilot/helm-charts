@@ -2,7 +2,7 @@
 # PCP runs as a DaemonSet to monitor each node in the cluster
 
 image:
-  repository: quay.io/performancecopilot/pcp
+  repository: ghcr.io/performancecopilot/pcp
   pullPolicy: IfNotPresent
   tag: "latest"
 

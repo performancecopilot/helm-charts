@@ -26,11 +26,7 @@ Pre-built packages are available at [packagecloud.io/performancecopilot/pcp](htt
 ### From OCI Registry (Recommended)
 
 ```bash
-# Install specific version from GitHub Container Registry
 helm install pcp oci://ghcr.io/performancecopilot/helm-charts/pcp --version 1.0.0 -n monitoring --create-namespace
-
-# Or from Quay.io
-helm install pcp oci://quay.io/performancecopilot-helm-charts/pcp --version 1.0.0 -n monitoring --create-namespace
 ```
 
 ### From Source
@@ -65,7 +61,7 @@ helm uninstall pcp -n monitoring
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `replicaCount` | Number of replicas (fixed at 1) | `1` |
-| `image.repository` | PCP container image repository | `quay.io/performancecopilot/pcp` |
+| `image.repository` | PCP container image repository | `ghcr.io/performancecopilot/pcp` |
 | `image.tag` | PCP container image tag | `latest` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `hostNetwork` | Use host networking | `false` |

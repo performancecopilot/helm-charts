@@ -7,7 +7,6 @@ on:
 
 env:
   REGISTRY_GHCR: ghcr.io/performancecopilot/helm-charts
-  REGISTRY_QUAY: quay.io/performancecopilot-helm-charts
 
 jobs:
   release:
@@ -43,13 +42,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to Quay.io
-        uses: docker/login-action@v3
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
       - name: Package and push charts
         id: package
         run: |
@@ -70,10 +62,6 @@ jobs:
           helm push pcp-${VERSION}.tgz oci://${REGISTRY_GHCR}
           helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_GHCR}
 
-          # Push to Quay.io
-          helm push pcp-${VERSION}.tgz oci://${REGISTRY_QUAY}
-          helm push archive-analysis-${VERSION}.tgz oci://${REGISTRY_QUAY}
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -93,12 +81,6 @@ jobs:
             ```bash
             helm install pcp oci://${{ env.REGISTRY_GHCR }}/pcp --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
             helm install archive-analysis oci://${{ env.REGISTRY_GHCR }}/archive-analysis --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
-            ```
-
-            #### From Quay.io:
-            ```bash
-            helm install pcp oci://${{ env.REGISTRY_QUAY }}/pcp --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
-            helm install archive-analysis oci://${{ env.REGISTRY_QUAY }}/archive-analysis --version ${{ steps.package.outputs.VERSION }} -n monitoring --create-namespace
             ```
 
             #### From packaged chart (attached to this release):

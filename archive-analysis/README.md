@@ -23,11 +23,7 @@ This chart deploys the PCP Archive Analysis container which includes Grafana wit
 ### From OCI Registry (Recommended)
 
 ```bash
-# Install specific version from GitHub Container Registry
 helm install archive-analysis oci://ghcr.io/performancecopilot/helm-charts/archive-analysis --version 1.0.0 -n monitoring --create-namespace
-
-# Or from Quay.io
-helm install archive-analysis oci://quay.io/performancecopilot-helm-charts/archive-analysis --version 1.0.0 -n monitoring --create-namespace
 ```
 
 ### From Source
@@ -64,7 +60,7 @@ The following table lists the configurable parameters and their default values:
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `replicaCount` | Number of replicas | `1` |
-| `image.repository` | Container image repository | `quay.io/performancecopilot/archive-analysis` |
+| `image.repository` | Container image repository | `ghcr.io/performancecopilot/archive-analysis` |
 | `image.tag` | Container image tag | `""` (uses appVersion) |
 | `image.pullPolicy` | Container image pull policy | `IfNotPresent` |
 | `service.type` | Kubernetes service type | `ClusterIP` |
