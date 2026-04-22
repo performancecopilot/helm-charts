@@ -199,26 +199,3 @@ Charts are automatically discovered by ArtifactHub via:
 
 No manual action required - ArtifactHub will scan and index releases automatically.
 
-## Troubleshooting
-
-### Chart Not Appearing in Registry
-
-**Error**: `repository not found`
-
-**Solution**:
-1. Check workflow logs for errors
-2. Verify registry permissions
-3. Ensure the tag follows the `v*` pattern
-
-### Version Conflicts
-
-**Error**: `chart version already exists`
-
-**Solution**: You cannot overwrite existing chart versions. Create a new version instead.
-
-## Resources
-
-- [Helm OCI Documentation](https://helm.sh/docs/topics/registries/)
-- [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-- [ArtifactHub](https://artifacthub.io)
-- [Semantic Versioning](https://semver.org/)
